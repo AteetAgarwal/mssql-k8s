@@ -51,5 +51,35 @@ namespace WebAPI
             return lstCom;
         }
 
+        public List<Common> AddEmployee(List<Employee> newEmp)
+        {
+            Common emp = new Common();
+            List<Common> lstCom = new List<Common>();
+            try
+            {
+                if (newEmp.Any(a=>String.IsNullOrEmpty(a.Emp_Name)) || newEmp.Any(a => String.IsNullOrEmpty(a.Emp_Phone)) || newEmp.Any(a => String.IsNullOrEmpty(a.Dept_Name)))
+                {
+                    emp.Table = null;
+                    emp.StatusCode = 0;
+                    emp.Message = "Mandatory field are missing values.";
+                    emp.Status = "Fail";
+                }
+                else
+                {
+                    _dbContext.Employees.AddRange(newEmp);
+                    _dbContext.SaveChanges();
+                    emp.Table = _dbContext.Employees.OrderByDescending(o => o.Emp_NO).ToList();
+                    emp.StatusCode = 1;
+                    emp.Message = "Record fetching sucessfully...";
+                    emp.Status = "Sucess";
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            lstCom.Add(emp);
+            return lstCom;
+        }
     }
 }

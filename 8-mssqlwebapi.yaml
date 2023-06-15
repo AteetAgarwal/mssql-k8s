@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssqlwebapi-deployment
+  labels:
+    app: mssqlwebapi
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: mssqlwebapi
+  template:
+    metadata:
+      labels:
+        app: mssqlwebapi
+    spec:
+      containers:
+      - name: mssqlwebapi-container
+        image: ateet1989/mssqlwebapi:v2
+        ports:
+        - containerPort: 80
+        env:
+        - name: MSSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql-secret
+              key: SA_PASSWORD
+        volumeMounts:
+        - name: mssqlconfigmap
+          mountPath: /app/config
+      volumes:
+      - name: mssqlconfigmap
+        configMap:
+          name: mssql-configmap

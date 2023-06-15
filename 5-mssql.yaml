@@ -22,6 +22,16 @@ spec:
       containers:
       - name: mssql
         image: mcr.microsoft.com/mssql/rhel/server:2019-latest
+        lifecycle:
+          postStart:
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  /opt/mssql/bin/sqlservr &
+                  sleep 30
+                  /opt/mssql-tools/bin/sqlcmd -U sa -P $MSSQL_SA_PASSWORD -l 30 -e -i /var/opt/mssqldata/schemaanddata.sql
         ports:
         - containerPort: 1433
           name: tcpsql
@@ -38,7 +48,12 @@ spec:
         volumeMounts:
         - name: mssqldb
           mountPath: /var/opt/mssql
+        - name: mssqldataconfigmap
+          mountPath: /var/opt/mssqldata
       volumes:
       - name: mssqldb
         persistentVolumeClaim:
           claimName: mssql-pvc
+      - name: mssqldataconfigmap
+        configMap:
+          name: mssqldata-configmap

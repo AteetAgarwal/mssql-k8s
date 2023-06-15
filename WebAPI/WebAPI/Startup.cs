@@ -33,7 +33,9 @@ namespace WebAPI
             services.AddControllers();
             services.AddDbContext<DataBaseContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Con"));
+                string mssqlPAssword = Environment.GetEnvironmentVariable("MSSQL_PASSWORD");
+                string connString = Configuration.GetConnectionString("Con").Replace("$DB_PASSWORD$", mssqlPAssword);
+                options.UseSqlServer(connString);
             });
             services.AddSwaggerGen(c =>
             {
@@ -44,7 +46,7 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();

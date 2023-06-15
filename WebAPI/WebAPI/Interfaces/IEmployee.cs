@@ -8,5 +8,6 @@ namespace WebAPI.Interfaces
     public interface IEmployee
     {
         public List<Common> GetEmployeeDetails();
+        public List<Common> AddEmployee(List<Employee> newEmp);
     }
 }

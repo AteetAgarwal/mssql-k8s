@@ -26,5 +26,11 @@ namespace WebAPI.Controllers
         {
             return await Task.FromResult(_IEmployee.GetEmployeeDetails());
         }
+
+        [HttpPost]
+        public async Task<ActionResult<IEnumerable<Common>>> AddEmployee(List<Employee> newEmp)
+        {
+            return await Task.FromResult(_IEmployee.AddEmployee(newEmp));
+        }
     }
 }
