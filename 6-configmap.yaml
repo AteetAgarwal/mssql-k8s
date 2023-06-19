@@ -13,6 +13,6 @@ data:
         }
       },
       "ConnectionStrings": {
-        "Con": "Data Source=mssql-service.default.svc.cluster.local;User ID=sa;Password=$DB_PASSWORD$;Initial Catalog=employeedb;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+        "Con": "Data Source=mssql-service.default.svc.cluster.local;User ID=sa;Password=$DB_PASSWORD$;Initial Catalog=employeedb;Connect Timeout=10;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
       }
     }

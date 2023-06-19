@@ -15,6 +15,36 @@ namespace WebAPI
             _dbContext = dbContext;
         }
 
+        public List<Common> CheckDBConnection()
+        {
+            Common emp = new Common();
+            List<Common> lstCom = new List<Common>();
+            emp.Table = null;
+            try
+            {
+                if (_dbContext.Database.CanConnect())
+                {
+                    emp.StatusCode = 1;
+                    emp.Message = "Database server is up";
+                    emp.Status = "Sucess";
+                }
+                else
+                {
+                    emp.StatusCode = 0;
+                    emp.Message = "Wait! Database server is not yet up";
+                    emp.Status = "Fail";
+                }
+            }
+            catch
+            {
+                emp.StatusCode = 0;
+                emp.Message = "Wait! Database server is not yet up";
+                emp.Status = "Fail";
+            }
+            lstCom.Add(emp);
+            return lstCom;
+        }
+
         public List<Common> GetEmployeeDetails()
         {
             Common emp = new Common();
@@ -37,7 +67,7 @@ namespace WebAPI
                 {
                     {
                         emp.Table = null;
-                        emp.StatusCode = 1;
+                        emp.StatusCode = 0;
                         emp.Message = "No Records found...?";
                         emp.Status = "Fail";
                     }
@@ -57,7 +87,7 @@ namespace WebAPI
             List<Common> lstCom = new List<Common>();
             try
             {
-                if (newEmp.Any(a=>String.IsNullOrEmpty(a.Emp_Name)) || newEmp.Any(a => String.IsNullOrEmpty(a.Emp_Phone)) || newEmp.Any(a => String.IsNullOrEmpty(a.Dept_Name)))
+                if (newEmp.Any(a => String.IsNullOrEmpty(a.Emp_Name)) || newEmp.Any(a => String.IsNullOrEmpty(a.Emp_Phone)) || newEmp.Any(a => String.IsNullOrEmpty(a.Dept_Name)))
                 {
                     emp.Table = null;
                     emp.StatusCode = 0;

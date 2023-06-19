@@ -6,6 +6,12 @@ metadata:
     app: mssqlwebapi
 spec:
   replicas: 4
+  minReadySeconds: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: mssqlwebapi
@@ -16,9 +22,26 @@ spec:
     spec:
       containers:
       - name: mssqlwebapi-container
-        image: ateet1989/mssqlwebapi:v2
+        image: ateet1989/mssqlwebapi:v5
+        resources:
+          requests:
+            memory: "200Mi"
+            cpu: "50m"
+          limits:
+            memory: "400Mi"
+            cpu: "100m"
         ports:
         - containerPort: 80
+          name: webapi-http
+        readinessProbe:
+          httpGet:
+            port: 80
+            path: /healthz
+          successThreshold: 3
+          initialDelaySeconds: 10
+          timeoutSeconds: 20
+          periodSeconds: 5
+          failureThreshold: 3
         env:
         - name: MSSQL_PASSWORD
           valueFrom:
@@ -32,3 +55,4 @@ spec:
       - name: mssqlconfigmap
         configMap:
           name: mssql-configmap
+        

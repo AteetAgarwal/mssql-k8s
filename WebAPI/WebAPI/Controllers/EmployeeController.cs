@@ -21,6 +21,12 @@ namespace WebAPI.Controllers
             _IEmployee = IEmployees;
         }
 
+        [HttpGet("/healthz")]
+        public async Task<ActionResult<IEnumerable<Common>>> CheckDBConnection()
+        {
+            return await Task.FromResult(_IEmployee.CheckDBConnection());
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Common>>> GetEmployeeDetails()
         {
